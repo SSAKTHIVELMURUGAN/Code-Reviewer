@@ -1,0 +1,10 @@
+{
+    "name": "frappe-code-validate",
+    "version": "1.1.0",
+    "description": "A Python package for automatic code validation with JS support",
+    "dependencies": {
+        "jshint": "^2.13.6",
+        "prettier": "^2.8.8",
+        "retire": "^2.2.5"
+    }
+}

@@ -1,0 +1,13 @@
+setuptools==59.6.0
+flake8==6.0.0
+radon==6.0.1
+black==23.12.1
+bandit==1.7.5
+coverage==7.3.1
+pylint==2.16.0
+mypy==1.2.0
+vulture==2.5
+autoflake==1.6
+pydocstyle==6.1.1
+pipreqs==0.4.10
+pep8-naming==0.11.1
