@@ -1,0 +1,46 @@
+name: Code Validation
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ✅ Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Python Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install flake8 radon black bandit coverage pylint mypy vulture autoflake pydocstyle pipreqs pep8-naming
+
+      # ✅ Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install JavaScript Dependencies
+        run: |
+          npm install -g jshint prettier retire snyk depcheck license-checker
+
+      # ✅ Run Python Code Validation
+      - name: Run Python Code Validation
+        run: frappe-code-validate my_script.py
+
+      # ✅ Run JavaScript Code Validation
+      - name: Run JavaScript Code Validation
+        run: |
+          jshint .
+          jslint **/*.js
+          prettier --check "**/*.js"
+          retire --js .
+          snyk test
+          depcheck
+          license-checker --summary
