@@ -73,9 +73,6 @@ class PythonValidator:
         self.summary["Complexity"] = "Passed" if cc_rank in ["A", "B"] else "Failed"
         self.summary["Maintainability"] = "Passed" if mi_rank in ["A", "B"] else "Failed"
 
-        if cc_rank not in ["A", "B"] or mi_rank not in ["A", "B"]:
-            self.fail_check("Complexity & Maintainability")
-
         formatted_result = f"""
 🛠 **Cyclomatic Complexity (CC)**
 {cc_result}
