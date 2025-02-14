@@ -79,7 +79,9 @@ class PythonValidator:
         Runs pipreqs to analyze dependencies required by the script.
         """
         output = run_command(f"pipreqs --print {file_path}")
+
         return format_output("Dependency Check", output) if output.strip() else None
+    
 
     def check_complexity(self, file_path):
         """
@@ -143,7 +145,6 @@ class PythonValidator:
         """
         self.summary[check_name] = "Failed"
         self.failed_checks += 1
-        self.summary["Overall Status"] = "Fail"
 
     def generate_pylint_rating_explanation(self, rating):
         """
@@ -178,6 +179,7 @@ class PythonValidator:
             if result:
                 print(result)
 
+        self.summary["Overall Status"] = "Fail" if any(status == "Failed" for status in self.summary.values()) else "Pass"
         print("\n📊 Validation Summary\n" + "-"*30)
         for check, status in self.summary.items():
             print(f"{check:<20} {status}")

@@ -1,4 +1,3 @@
-import os
 from .utils import run_command, format_output
 
 class JSValidator:
@@ -19,8 +18,8 @@ class JSValidator:
         return self.format_output("Prettier Formatting", result) if result else None
 
     def check_retire(self, file_path):
-        """Check for security vulnerabilities using Retire.js (only for JS files)."""
-        result = self.run_command(f"npx retire --js {file_path}")
+        """Check for security vulnerabilities using Retire.js."""
+        result = self.run_command(f"npx retire {file_path}")  # Removed --js flag
         return self.format_output("Retire.js Security Check", result) if result else None
     
     def validate_code(self, file_path):
@@ -34,9 +33,19 @@ class JSValidator:
 
         checks = [eslint_result, prettier_result, retire_result]
 
-        # Print only non-None results
+        has_errors = False  # Track if any error is found
+        
+        # Print only non-None results and check for errors
         for result in checks:
             if result is not None:
                 print(result)
+                if "error" in result.lower() or "failed" in result.lower():
+                    has_errors = True
 
-        print("\n✅ JavaScript validation complete!\n")
+        overall_status = "❌ Failed" if has_errors else "✅ Passed"
+        print("\n============================================================")
+        print(f"📌 Overall Status: {overall_status}")
+        print("============================================================\n")
+        
+        print("✅ JavaScript validation complete!\n")
+        return overall_status
