@@ -51,7 +51,7 @@ def main():
     elif args.command == "validate":
         validate_project(args.directory)
     elif args.command == "validate-file":
-        validate_files(args.files)  # Pass multiple files as a list
+        validate_files(args.files)  
     elif args.command == "validate-staged":
         staged_files = get_staged_files()
         if staged_files:

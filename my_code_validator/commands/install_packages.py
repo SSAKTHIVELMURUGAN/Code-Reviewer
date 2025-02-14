@@ -51,6 +51,7 @@ def install_packages():
     if js_dependencies:
         print("🔄 Installing JavaScript dependencies...")
         subprocess.run(["npm", "install"] + js_dependencies, check=True)
+        install_eslint()
         print("✅ JavaScript dependencies installed.")
 
     setup_pre_commit_hook()
@@ -84,3 +85,91 @@ def setup_pre_commit_hook():
     # Make it executable
     subprocess.run(["chmod", "+x", pre_commit_path], check=True)
     print("✅ Pre-commit hook installed successfully.")
+
+def install_eslint():
+    """Set up ESLint manually with a custom configuration file."""
+    
+    print("🔄 Initializing ESLint setup...")
+
+    # Install ESLint and required dependencies
+    print("🔄 Installing ESLint packages...")
+    subprocess.run(["npm", "install", "eslint"], check=True)
+    subprocess.run(["npm", "install", "--save-dev", "eslint", "@eslint/js", "globals"], check=True)
+    print("✅ ESLint installed.")
+
+    # Define eslint.config.cjs file path
+    eslint_config_file = "eslint.config.cjs"
+
+    # Create eslint.config.cjs file if it doesn't exist
+    if not os.path.exists(eslint_config_file):
+        print("📄 Creating eslint.config.cjs file...")
+        eslint_config_content = '''// eslint.config.cjs
+const pluginJs = require("@eslint/js");
+
+module.exports = [
+  pluginJs.configs.recommended,
+  {
+    rules: {
+      "no-unused-vars": "warn",
+      "no-undef": "warn",
+      "semi": ["error", "always"],             // Enforces semicolons at the end of statements
+      "quotes": ["error", "single"],           // Enforces the use of single quotes
+      "eqeqeq": "warn",                        // Enforces strict equality operators
+      "curly": "error",                        // Requires consistent brace style for all control statements
+      "no-console": "warn",                    // Warns about console usage
+      "no-eval": "error",                      // Disallows the use of eval()
+      "no-debugger": "error",                  // Disallows the use of debugger
+      "indent": ["error", 2],                  // Enforces consistent indentation of 2 spaces
+      "comma-dangle": ["error", "never"],      // Disallows trailing commas
+
+      // Naming Conventions:
+      "camelcase": ["error", { "properties": "always", "ignoreDestructuring": false }],
+      "new-cap": ["error", { "newIsCap": true, "capIsNew": true }],
+
+      // Break long lines for readability:
+      "max-len": ["warn", { "code": 100, "ignoreUrls": true }],
+
+      // Clear spacing around expressions and operators:
+      "space-infix-ops": "error",
+      "keyword-spacing": "error",
+      "space-before-blocks": "error",
+      "space-unary-ops": "error",
+
+      // Prefer const and let (avoid var):
+      "prefer-const": "error",
+      "no-var": "error",
+
+      // Minimize the use of global variables:
+      "no-implicit-globals": "error",
+
+      // Avoid using deprecated APIs:
+      "no-restricted-syntax": [
+        "error", // ✅ Added severity level
+        {
+          "selector": "CallExpression[callee.name='eval']",
+          "message": "Avoid using eval() due to security risks."
+        },
+        {
+          "selector": "Identifier[name='cur_frm']",
+          "message": "Deprecated API cur_frm is not allowed. Use an alternative approach."
+        },
+        {
+          "selector": "CallExpression[callee.name='get_query']",
+          "message": "Deprecated API get_query() is not allowed. Use a modern API method."
+        },
+        {
+          "selector": "CallExpression[callee.name='add_fetch']",
+          "message": "Deprecated API add_fetch() is not allowed. Use an updated data retrieval method."
+        }
+      ]
+    }
+  }
+];
+'''
+        with open(eslint_config_file, "w") as config_file:
+            config_file.write(eslint_config_content)
+        print("✅ eslint.config.cjs created with default settings.")
+    else:
+        print("✅ eslint.config.cjs already exists, skipping creation.")
+
+    print("\n🚀 ESLint setup complete!")

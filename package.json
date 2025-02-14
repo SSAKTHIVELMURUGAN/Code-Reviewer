@@ -6,5 +6,20 @@
         "jshint": "^2.13.6",
         "prettier": "^2.8.8",
         "retire": "^2.2.5"
-    }
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.20.0",
+        "eslint": "^9.20.1",
+        "globals": "^15.15.0"
+    },
+    "main": "index.js",
+    "directories": {
+        "test": "tests"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
