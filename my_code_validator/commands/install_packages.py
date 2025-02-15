@@ -7,7 +7,7 @@ from .dependencies import install_requires, js_dependencies
 PRE_COMMIT_HOOK = """#!/bin/bash
 echo "🚀 Running frappe-code-validate on staged files..."
 
-OUTPUT=$(python -m my_code_validator.cli validate-staged)
+OUTPUT=$(frappe-code validate-staged)
 RESULT=$?
 
 echo "$OUTPUT"

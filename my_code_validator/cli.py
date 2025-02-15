@@ -11,7 +11,7 @@ def get_staged_files():
     try:
         result = subprocess.run(["git", "diff", "--name-only", "--cached"], capture_output=True, text=True, check=True)
         files = result.stdout.strip().split("\n")
-        return [file for file in files if file.endswith((".py", ".js"))]  # Filter only .py and .js files
+        return [file for file in files if file.endswith((".py", ".js"))]
     except subprocess.CalledProcessError:
         print("❌ Error: Failed to get staged files. Ensure you're inside a Git repository.")
         return []
@@ -26,6 +26,12 @@ def main():
     # Subparsers for different commands
     subparsers = parser.add_subparsers(dest="command")
 
+    # Install packages
+    subparsers.add_parser("install", help="Install required dependencies")
+
+    # Uninstall package
+    subparsers.add_parser("uninstall", help="Uninstall frappe-code-validate package")
+
     # Validate project
     validate_parser = subparsers.add_parser("validate", help="Validate all Python and JS files in a project directory")
     validate_parser.add_argument("directory", type=str, help="Project directory path")
@@ -35,13 +41,8 @@ def main():
     file_parser.add_argument("files", nargs="+", help="Path(s) to file(s)")
 
     # Validate only staged files
-    staged_parser = subparsers.add_parser("validate-staged", help="Validate only staged Python and JS files")
+    subparsers.add_parser("validate-staged", help="Validate only staged Python and JS files")
 
-    # Install packages
-    subparsers.add_parser("install", help="Install required dependencies")
-
-    # Uninstall package
-    subparsers.add_parser("uninstall", help="Uninstall frappe-code-validate package")
 
     args = parser.parse_args()
 
